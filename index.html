@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レビュー画面</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="review-card">
+            <h1>サービス評価</h1>
+            <p class="subtitle">お客様のご意見をお聞かせください</p>
+            
+            <div class="rating-section">
+                <div class="stars">
+                    <i class="fas fa-star" data-rating="1"></i>
+                    <i class="fas fa-star" data-rating="2"></i>
+                    <i class="fas fa-star" data-rating="3"></i>
+                    <i class="fas fa-star" data-rating="4"></i>
+                    <i class="fas fa-star" data-rating="5"></i>
+                </div>
+                <p class="rating-text">星をクリックして評価してください</p>
+            </div>
+
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="nickname">ニックネーム</label>
+                    <input type="text" id="nickname" placeholder="お名前を入力してください（任意）" maxlength="20">
+                </div>
+                
+                <div class="form-group">
+                    <label for="comment">コメント <span class="required">*</span></label>
+                    <textarea id="comment" placeholder="ご感想やご意見をお聞かせください（必須）" rows="4" maxlength="500" required></textarea>
+                    <div class="char-count">
+                        <span id="charCount">0</span>/500文字
+                    </div>
+                </div>
+                
+                <div class="submit-section">
+                    <button class="btn btn-submit" onclick="submitReview()" id="submitBtn" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                        レビューを送信
+                    </button>
+                </div>
+            </div>
+
+            <div class="feedback-section" id="feedbackSection" style="display: none;">
+                <div class="message" id="message"></div>
+                <div class="google-review-section" id="googleReviewSection" style="display: none;">
+                    <p>Googleへのレビューをお願いします</p>
+                    <p class="help-text"><i class="fas fa-info-circle"></i> コメント内容が自動的にクリップボードにコピーされます</p>
+                    <div class="button-group">
+                        <button class="btn btn-primary" onclick="writeGoogleReview()">レビューを書く</button>
+                        <button class="btn btn-secondary" onclick="skipReview()">スキップ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
