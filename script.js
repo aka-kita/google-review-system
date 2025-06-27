@@ -138,29 +138,40 @@ function submitReview() {
         return;
     }
     
+    // 送信ボタンを無効化して重複送信を防ぐ
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 送信中...';
+    
     // レビューデータを保存
-    saveReviewData();
-    
-    // フォームセクションを非表示
-    document.querySelector('.form-section').style.display = 'none';
-    document.querySelector('.rating-section').style.display = 'none';
-    
-    // フィードバックセクションを表示
-    feedbackSection.style.display = 'block';
-    
-    // 評価に応じたメッセージを表示
-    if (currentRating >= 4) {
-        // 星4以上の場合
-        message.textContent = '素晴らしい評価をありがとうございます！';
-        googleReviewSection.style.display = 'block';
-    } else {
-        // 星3以下の場合
-        message.textContent = 'レビューへの協力ありがとうございました。';
-        googleReviewSection.style.display = 'none';
-    }
-    
-    // 送信ボタンを非表示
-    submitBtn.style.display = 'none';
+    saveReviewData().then(() => {
+        // フォームセクションを非表示
+        document.querySelector('.form-section').style.display = 'none';
+        document.querySelector('.rating-section').style.display = 'none';
+        
+        // フィードバックセクションを表示
+        feedbackSection.style.display = 'block';
+        
+        // 評価に応じたメッセージを表示
+        if (currentRating >= 4) {
+            // 星4以上の場合
+            message.textContent = '素晴らしい評価をありがとうございます！';
+            googleReviewSection.style.display = 'block';
+        } else {
+            // 星3以下の場合
+            message.textContent = 'レビューへの協力ありがとうございました。';
+            googleReviewSection.style.display = 'none';
+        }
+        
+        // 送信ボタンを非表示
+        submitBtn.style.display = 'none';
+    }).catch((error) => {
+        console.error('レビューの保存に失敗しました:', error);
+        alert('レビューの送信に失敗しました。もう一度お試しください。');
+        
+        // 送信ボタンを元に戻す
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> レビューを送信';
+    });
 }
 
 // レビューデータを取得
@@ -176,15 +187,18 @@ function getReviewData() {
     };
 }
 
-// レビューデータを保存（ローカルストレージ）
+// レビューデータを保存（Firebase Realtime Database）
 function saveReviewData() {
     const reviewData = getReviewData();
-    const existingReviews = JSON.parse(localStorage.getItem('reviews') || '[]');
-    existingReviews.push(reviewData);
-    localStorage.setItem('reviews', JSON.stringify(existingReviews));
     
-    // コンソールに保存されたデータを表示（デバッグ用）
-    console.log('レビューデータが保存されました:', reviewData);
+    // Firebase にデータを保存
+    return FirebaseDB.saveReview(reviewData).then(() => {
+        // コンソールに保存されたデータを表示（デバッグ用）
+        console.log('レビューデータがFirebaseに保存されました:', reviewData);
+    }).catch((error) => {
+        console.error('Firebaseへの保存に失敗しました:', error);
+        throw error;
+    });
 }
 
 // Googleレビューを書く
