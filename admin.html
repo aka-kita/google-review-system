@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理者画面 - レビュー管理</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1><i class="fas fa-chart-line"></i> レビュー管理画面</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="exportReviews()">
+                    <i class="fas fa-download"></i> エクスポート
+                </button>
+                <button class="btn btn-danger" onclick="clearAllReviews()">
+                    <i class="fas fa-trash"></i> 全削除
+                </button>
+            </div>
+        </header>
+
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="totalReviews">0</h3>
+                    <p>総レビュー数</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="averageRating">0.0</h3>
+                    <p>平均評価</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-thumbs-up"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="positiveReviews">0</h3>
+                    <p>高評価（4-5星）</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="recentReviews">0</h3>
+                    <p>今月のレビュー</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="filters-section">
+            <div class="filter-group">
+                <label for="ratingFilter">評価フィルター:</label>
+                <select id="ratingFilter" onchange="filterReviews()">
+                    <option value="all">すべて</option>
+                    <option value="5">5星</option>
+                    <option value="4">4星</option>
+                    <option value="3">3星</option>
+                    <option value="2">2星</option>
+                    <option value="1">1星</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="dateFilter">期間フィルター:</label>
+                <select id="dateFilter" onchange="filterReviews()">
+                    <option value="all">すべて</option>
+                    <option value="today">今日</option>
+                    <option value="week">今週</option>
+                    <option value="month">今月</option>
+                    <option value="year">今年</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="searchInput">検索:</label>
+                <input type="text" id="searchInput" placeholder="ニックネームやコメントで検索..." oninput="filterReviews()">
+            </div>
+            <div class="filter-group">
+                <label for="sortBy">並び順:</label>
+                <select id="sortBy" onchange="filterReviews()">
+                    <option value="newest">新しい順</option>
+                    <option value="oldest">古い順</option>
+                    <option value="rating-high">評価高い順</option>
+                    <option value="rating-low">評価低い順</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="reviews-section">
+            <div class="reviews-header">
+                <h2>レビュー一覧</h2>
+                <span class="review-count" id="reviewCount">0件表示中</span>
+            </div>
+            <div class="reviews-container" id="reviewsContainer">
+                <!-- レビューがここに動的に表示されます -->
+            </div>
+        </div>
+
+        <!-- レビュー詳細モーダル -->
+        <div id="reviewModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div id="modalContent">
+                    <!-- モーダル内容がここに表示されます -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    
+    <!-- Firebase 設定 -->
+    <script src="firebase-config.js"></script>
+    
+    <!-- 管理者スクリプト -->
+    <script src="admin.js"></script>
+</body>
+</html> 
